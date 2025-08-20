@@ -1,0 +1,37 @@
+services:
+  - type: web
+    name: n8n
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+
+    # Public URL: https://n8n-<random>.onrender.com
+    # Render will provide PORT; n8n listens on 5678 internally.
+
+    autoDeploy: true
+
+    disk:
+      name: n8n_data
+      mountPath: /home/node/.n8n
+      sizeGB: 1
+
+    envVars:
+      - key: N8N_BASIC_AUTH_ACTIVE
+        value: "true"
+      - key: N8N_BASIC_AUTH_USER
+        value: admin
+      - key: N8N_BASIC_AUTH_PASSWORD
+        sync: false          # set as secret in Render after first deploy
+      - key: N8N_PROTOCOL
+        value: https
+      - key: GENERIC_TIMEZONE
+        value: Asia/Kolkata
+
+      # The three below must match your Render URL (set after the first deploy).
+      # On first deploy, leave them blank; then edit with the actual host.
+      - key: N8N_HOST
+        value: ""            # e.g. n8n-xxxxx.onrender.com
+      - key: WEBHOOK_URL
+        value: ""            # e.g. https://n8n-xxxxx.onrender.com/
+      - key: N8N_EDITOR_BASE_URL
+        value: ""            # e.g. https://n8n-xxxxx.onrender.com/
